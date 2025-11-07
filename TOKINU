@@ -254,7 +254,7 @@ local function sendWebhook(foundPets, jobId)
     local embedData = {
         username = "TOKINU LOGGA",
         embeds = { {
-            title = "ADMIN PANEL",
+            title = "ZZZZ HUB",
             description = "**Pet(s):**\n" .. table.concat(formattedPets, "\n"),
             color = 65280,
             fields = {
