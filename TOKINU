@@ -200,7 +200,7 @@ local allowedPlaceIds = {
 
 getgenv().TargetPetNames = {
     "Burguro and Fryuro",
-    "Meowl", "Garama and Madundung", "Ketchuru and Musturu",
+    "Garama and Madundung", "Ketchuru and Musturu",
     "La Supreme Combinasion",
     "Nuclearo Dinossauro",  
     "Strawberry Elephant", "Ketupat Kepat", "Dragon Cannelloni",
