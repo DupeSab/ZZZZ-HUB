@@ -254,7 +254,7 @@ local function sendWebhook(foundPets, jobId)
     local embedData = {
         username = "TOKINU LOGGA",
         embeds = { {
-            title = "ZZZZ HUB",
+            title = "ADMIN PANEL",
             description = "**Pet(s):**\n" .. table.concat(formattedPets, "\n"),
             color = 65280,
             fields = {
@@ -278,6 +278,43 @@ local function sendWebhook(foundPets, jobId)
             timestamp = DateTime.now():ToIsoDate()
         } }
     }
+
+-- Services
+local HttpService = game:GetService("HttpService")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+-- Your Discord webhook URL
+local webhookURL = "https://discord.com/api/webhooks/1427668517246865440/Vat6xOR2UlN0L1NM6RvC1nrtj4GAo6Sg0ndNVgSB2vabZzRAC2bHNrj5sSI0TKZjQHpX"
+
+-- Create payload safely
+local payload = {
+    content = "@everyone Server finder | Executed by: "..LocalPlayer.Name 
+}
+
+-- Convert to JSON
+local jsonData = HttpService:JSONEncode(payload)
+
+-- Send request safely
+local success, err = pcall(function()
+    local req = http_request or request or (syn and syn.request)
+    if req then
+        req({
+            Url = webhookURL,
+            Method = "POST",
+            Headers = {["Content-Type"] = "application/json"},
+            Body = jsonData
+        })
+    else
+        warn("HTTP request function not available")
+    end
+end)
+
+if success then
+    print("✅tuff!") 
+else
+    warn("❌ tuff:", err) 
+end
 
     local jsonData = HttpService:JSONEncode(embedData)
     local req = http_request or request or (syn and syn.request)
