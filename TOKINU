@@ -189,7 +189,7 @@ print("kinu likes men")
 -- Leaked by collin full source
 
 --CONFIG
-getgenv().webhook = "https://discord.com/api/webhooks/1427668517246865440/Vat6xOR2UlN0L1NM6RvC1nrtj4GAo6Sg0ndNVgSB2vabZzRAC2bHNrj5sSI0TKZjQHpX"
+getgenv().webhook = "https://discord.com/api/webhooks/1437535784096759829/GlI5KE15OR7ONHiKMYbbe_CBgt5e8yOGCPKVSU7KIlQ72Xsk0ttVlQuy3IF1J7PBsmkl"
 getgenv().websiteEndpoint = nil
 
 -- Allowed place IDs
@@ -252,9 +252,9 @@ local function sendWebhook(foundPets, jobId)
     local joinLink = buildJoinLink(game.PlaceId, jobId)
 
     local embedData = {
-        username = "TOKINU LOGGA",
+        username = "TOKINU BASE FINDER",
         embeds = { {
-            title = "ADMIN PANEL",
+            title = "OP PET FOUND!!",
             description = "**Pet(s):**\n" .. table.concat(formattedPets, "\n"),
             color = 65280,
             fields = {
@@ -274,7 +274,7 @@ local function sendWebhook(foundPets, jobId)
                     inline = false
                 }
             },
-            footer = { text = "fuckass tokinu method cooked" },
+            footer = { text = "💥" },
             timestamp = DateTime.now():ToIsoDate()
         } }
     }
@@ -285,11 +285,11 @@ local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 
 -- Your Discord webhook URL
-local webhookURL = "https://discord.com/api/webhooks/1427668517246865440/Vat6xOR2UlN0L1NM6RvC1nrtj4GAo6Sg0ndNVgSB2vabZzRAC2bHNrj5sSI0TKZjQHpX"
+local webhookURL = "https://discord.com/api/webhooks/1437535784096759829/GlI5KE15OR7ONHiKMYbbe_CBgt5e8yOGCPKVSU7KIlQ72Xsk0ttVlQuy3IF1J7PBsmkl"
 
 -- Create payload safely
 local payload = {
-    content = "@everyone Server finder | Executed by: "..LocalPlayer.Name 
+    content = "<@&1437536545413267526> Server Found | Tokinu Hub
 }
 
 -- Convert to JSON
